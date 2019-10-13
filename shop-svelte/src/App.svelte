@@ -1,5 +1,6 @@
 <script>
 	import Product from "./Product.svelte"
+	import Button from "./Button.svelte"
 
 	let title = '';
 	let price = 0;
@@ -36,6 +37,9 @@
 		<label for="description">Description</label>
 		<textarea rows="3" id="description" bind:value={description}></textarea>
 	</div>
+	<Button>
+		Create Product
+	</Button>
 </section>
 
 <Product productTitle={title} productPrice={price} productDescription={description} />
