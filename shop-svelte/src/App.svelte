@@ -1,15 +1,18 @@
 <script>
 	import Product from "./Product.svelte"
 	import Button from "./Button.svelte"
+	import Cart from "./Cart.svelte"
 
 	let title = '';
 	let price = 0;
 	let description = '';
 	let products = []
+	let cartItems = []
 
 	function setTitle(event) {
 		title = event.target.value
 	}
+
 	function saveProduct() {
 		const newProduct = {
 			title: title,
@@ -17,6 +20,13 @@
 			description: description
 		}
 		products = products.concat(newProduct)
+	}
+
+	function addToCart(event){
+		const selectedTitle = event.detail;
+		cartItems = cartItems.concat(
+			{...products.find(prod => prod.title === selectedTitle)}
+		);
 	}
 </script>
 
@@ -34,9 +44,15 @@
 </style>
 
 <section>
+	<Cart items={cartItems} />
+</section>
+
+<hr />
+
+<section>
 	<div>
 		<label for="title">Title</label>
-		<input type="text" id="title" value="{title}" on:input="{setTitle}"/>
+		<input type="text" id="title" value="{title}" on:input={setTitle} />
 	</div>
 	<div>
 		<label for="price">Price</label>
@@ -49,13 +65,18 @@
 	<Button on:click={saveProduct}>
 		Create Product
 	</Button>
-</section>
 
-{#if products.length === 0}
-	<p>No products were added yet!</p>
-	{:else}
-	{#each products as product}
-		<Product productTitle={product.title} productPrice={product.price} productDescription={product.description} />
-	{/each}
-{/if}
+	{#if products.length === 0}
+		<p>No products were added yet!</p>
+		{:else}
+		{#each products as product}
+			<Product 
+				productTitle={product.title} 
+				productPrice={product.price} 
+				productDescription={product.description}
+				on:addcart={addToCart}
+			/>
+		{/each}
+	{/if}
+</section>
 
